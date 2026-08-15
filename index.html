@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#14213D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Premios UNSL">
+<meta name="author" content="Roberto Maximiliano Salinas Ojeda">
+<meta name="description" content="Guía institucional de distinciones y premios de la Universidad Nacional de San Luis.">
+<title>Registro de Distinciones y Premios — UNSL</title>
+<!--
+  Registro de Distinciones y Premios — UNSL
+  © Roberto Maximiliano Salinas Ojeda. Todos los derechos reservados.
+  Aplicación y curaduría de contenido originales. Los datos de premios
+  provienen de resoluciones públicas de la Universidad Nacional de San Luis.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#14213D;
+    --navy-ink:#0d1729;
+    --gold:#B08D57;
+    --gold-light:#d9c191;
+    --paper:#FAFAF7;
+    --paper-dim:#F0EFE9;
+    --ink:#262421;
+    --ink-soft:#5b574f;
+    --line:#dcd8cd;
+    --maroon:#6B2737;
+    --c-honoris:#B08D57;
+    --c-emeritos:#14213D;
+    --c-lopez:#6B2737;
+    --c-defensa:#2F5233;
+    --c-polo:#A64B2A;
+    --c-puchmuller:#4A5859;
+    --c-turco:#5C4033;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  ::selection{background:var(--gold-light);}
+
+  /* ===== Letterhead ===== */
+  .letterhead{
+    background:linear-gradient(180deg,var(--navy) 0%, var(--navy-ink) 100%);
+    color:#F4F2EA;
+    padding:34px 24px 26px;
+    position:relative;
+    border-bottom:3px solid var(--gold);
+  }
+  .letterhead::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-7px; height:4px;
+    background:repeating-linear-gradient(90deg,var(--gold) 0 10px, transparent 10px 20px);
+    opacity:.55;
+  }
+  .letterhead-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:18px;}
+  .seal-mark{
+    width:56px;height:56px;flex:0 0 56px;border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--gold);
+    background:radial-gradient(circle at 35% 30%, rgba(176,141,87,.18), transparent 70%);
+  }
+  .letterhead h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(22px,3.6vw,32px);
+    margin:0 0 4px;
+    letter-spacing:.2px;
+  }
+  .letterhead p{
+    margin:0;
+    color:#c9c4b4;
+    font-size:14.5px;
+    letter-spacing:.4px;
+    font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;
+  }
+
+  /* ===== Controls ===== */
+  .controls-wrap{
+    max-width:1080px;margin:0 auto;padding:22px 24px 0;
+  }
+  .search-row{
+    display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;
+  }
+  .search-row input[type=text]{
+    flex:1 1 260px;
+    padding:11px 14px;
+    border:1.5px solid var(--line);
+    background:#fff;
+    font-family:'Source Serif 4',serif;
+    font-size:15px;
+    border-radius:3px;
+    color:var(--ink);
+  }
+  .search-row input[type=text]:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold);}
+  .search-row select{
+    padding:11px 12px;
+    border:1.5px solid var(--line);
+    background:#fff;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13.5px;
+    border-radius:3px;
+    color:var(--ink);
+  }
+  .search-row select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+
+  /* ===== Folder tabs ===== */
+  .tabs{
+    display:flex;gap:4px;flex-wrap:wrap;
+    border-bottom:2px solid var(--navy);
+    padding-bottom:0;
+  }
+  @media (max-width:640px){
+    .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tab{flex:0 0 auto;}
+  }
+  .tab{
+    appearance:none;border:1.5px solid var(--line);border-bottom:none;
+    background:var(--paper-dim);
+    color:var(--ink-soft);
+    padding:9px 14px 8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:.3px;
+    cursor:pointer;
+    border-radius:6px 6px 0 0;
+    transform:translateY(2px);
+    transition:transform .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .tab[data-active="true"]{
+    background:#fff;
+    color:var(--ink);
+    border-color:var(--navy);
+    transform:translateY(0);
+    font-weight:600;
+    box-shadow:0 -2px 0 var(--tab-color,var(--navy)) inset;
+  }
+  .tab .count{color:var(--ink-soft);font-weight:400;}
+
+  /* ===== Result meta ===== */
+  .meta-row{
+    max-width:1080px;margin:0 auto;padding:14px 24px 0;
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+
+  /* ===== Cards grid ===== */
+  .grid{
+    max-width:1080px;margin:0 auto;padding:16px 24px 60px;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-left:4px solid var(--cat-color,var(--navy));
+    border-radius:4px;
+    padding:16px 16px 14px;
+    cursor:pointer;
+    display:flex;flex-direction:column;gap:8px;
+    transition:box-shadow .15s ease, transform .15s ease;
+  }
+  .card:hover, .card:focus-visible{
+    box-shadow:0 6px 18px rgba(20,33,61,.12);
+    transform:translateY(-2px);
+    outline:none;
+  }
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .card-year{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;
+    color:var(--cat-color,var(--navy));
+  }
+  .card-cat{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.4px;
+    text-transform:uppercase;color:var(--ink-soft);
+  }
+  .card-name{
+    font-family:'Fraunces',serif;font-weight:600;font-size:17px;line-height:1.3;
+    color:var(--ink);
+  }
+  .card-extra{font-size:12.5px;color:var(--ink-soft);font-style:italic;}
+  .card-desc{
+    font-size:13.5px;line-height:1.5;color:var(--ink-soft);
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .card-res{
+    margin-top:auto;padding-top:8px;border-top:1px dashed var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .card-res b{color:var(--ink);font-weight:500;}
+
+  .empty-state{
+    max-width:1080px;margin:0 auto;padding:60px 24px;text-align:center;color:var(--ink-soft);
+  }
+  .empty-state h3{font-family:'Fraunces',serif;color:var(--ink);margin-bottom:6px;}
+
+  /* ===== Modal ===== */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(13,23,41,.55);
+    display:none;align-items:flex-start;justify-content:center;
+    padding:5vh 16px;overflow-y:auto;z-index:50;
+  }
+  .modal-backdrop[data-open="true"]{display:flex;}
+  .modal{
+    background:#fff;max-width:640px;width:100%;border-radius:6px;
+    border-top:5px solid var(--cat-color,var(--navy));
+    padding:28px 28px 24px;position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  .modal-close{
+    position:absolute;top:14px;right:16px;background:none;border:none;
+    font-size:22px;line-height:1;color:var(--ink-soft);cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .modal-close:hover{color:var(--ink);}
+  .modal-header{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px;}
+  .modal-seal{flex:0 0 auto;}
+  .modal-cat{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.5px;
+    text-transform:uppercase;color:var(--cat-color,var(--navy));font-weight:500;
+  }
+  .modal-year{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft);}
+  .modal h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:4px 0 0;line-height:1.25;
+  }
+  .modal-extra{font-size:13px;font-style:italic;color:var(--ink-soft);margin-top:4px;}
+  .modal-desc{
+    font-size:15px;line-height:1.65;color:var(--ink);
+    white-space:pre-line;
+    margin:16px 0;
+    max-height:38vh;overflow-y:auto;padding-right:4px;
+  }
+  .modal-desc:empty::before{content:"No hay reseña detallada cargada para este registro todavía.";color:var(--ink-soft);font-style:italic;}
+  .res-block{
+    background:var(--paper-dim);border:1px solid var(--line);border-radius:4px;
+    padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .res-block .res-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);}
+  .res-block .res-num{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500;color:var(--navy);}
+  .res-actions{display:flex;gap:8px;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    border:1.5px solid var(--navy);background:var(--navy);color:#fff;
+    padding:8px 13px;border-radius:3px;cursor:pointer;letter-spacing:.2px;
+  }
+  .btn.secondary{background:#fff;color:var(--navy);}
+  .btn:hover{opacity:.88;}
+  .btn:active{transform:translateY(1px);}
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--navy);color:#fff;padding:10px 18px;border-radius:4px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+    opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:80;
+  }
+  .toast[data-show="true"]{opacity:1;}
+
+  /* ===== Add record ===== */
+  .add-section{
+    max-width:1080px;margin:0 auto;padding:0 24px 60px;
+  }
+  details.add-details{
+    border:1px solid var(--line);border-radius:5px;background:#fff;
+  }
+  details.add-details > summary{
+    cursor:pointer;list-style:none;padding:14px 18px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.3px;
+    color:var(--navy);text-transform:uppercase;display:flex;align-items:center;gap:8px;
+  }
+  details.add-details > summary::-webkit-details-marker{display:none;}
+  details.add-details > summary::before{content:"+";font-size:16px;transition:transform .15s ease;}
+  details.add-details[open] > summary::before{content:"–";}
+  .add-form{padding:6px 18px 20px;display:grid;gap:12px;grid-template-columns:1fr 1fr;}
+  .add-form .full{grid-column:1/-1;}
+  .add-form label{font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);display:block;margin-bottom:4px;}
+  .add-form input,.add-form select,.add-form textarea{
+    width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:3px;
+    font-family:'Source Serif 4',serif;font-size:14px;color:var(--ink);
+  }
+  .add-form textarea{min-height:80px;resize:vertical;}
+  .add-note{
+    grid-column:1/-1;font-size:12px;color:var(--ink-soft);background:var(--paper-dim);
+    border-left:3px solid var(--gold);padding:9px 12px;
+  }
+  .add-form .full.actions{display:flex;gap:10px;justify-content:flex-end;}
+
+  footer.site-footer{
+    text-align:center;padding:26px 24px 16px;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+    border-top:1px solid var(--line);
+  }
+  .footer-legal{
+    max-width:640px;margin:0 auto;line-height:1.6;
+  }
+  .footer-legal .author{color:var(--ink);font-weight:500;}
+  .footer-legal .legal-note{
+    display:block;margin-top:8px;font-size:10.5px;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .export-row{
+    text-align:center;padding-bottom:18px;
+  }
+
+  @media (max-width:640px){
+    .add-form{grid-template-columns:1fr;}
+    .letterhead-inner{gap:12px;}
+    .seal-mark{width:44px;height:44px;flex-basis:44px;font-size:16px;}
+    .letterhead{padding:24px 16px 20px;}
+    .controls-wrap{padding:18px 16px 0;}
+    .search-row{flex-direction:column;}
+    .search-row input[type=text], .search-row select{width:100%;}
+    .grid{grid-template-columns:1fr;padding:14px 16px 50px;gap:12px;}
+    .meta-row{padding:12px 16px 0;}
+    .add-section{padding:0 16px 50px;}
+    .modal{padding:22px 18px 20px;max-height:92vh;overflow-y:auto;}
+    .modal-header{gap:12px;}
+    .modal h2{font-size:19px;}
+    .res-block{flex-direction:column;align-items:flex-start;}
+    .res-actions{width:100%;}
+    .res-actions .btn{flex:1;}
+    .card-name{font-size:16px;}
+  }
+  @media (max-width:380px){
+    .letterhead h1{font-size:19px;}
+    .seal-mark{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="letterhead">
+  <div class="letterhead-inner">
+    <div class="seal-mark">UNSL</div>
+    <div>
+      <h1>Registro de Distinciones y Premios</h1>
+      <p>Universidad Nacional de San Luis — Guía institucional de designaciones</p>
+    </div>
+  </div>
+</header>
+
+<div class="controls-wrap">
+  <div class="search-row">
+    <input type="text" id="searchInput" placeholder="Buscar por nombre, mérito o resolución…" autocomplete="off">
+    <select id="yearFilter"><option value="">Todos los años</option></select>
+    <select id="sortOrder">
+      <option value="desc">Año: más reciente</option>
+      <option value="asc">Año: más antiguo</option>
+    </select>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</div>
+
+<div class="meta-row">
+  <span id="resultCount">— registros</span>
+  <span>Universidad Nacional de San Luis</span>
+</div>
+
+<main class="grid" id="grid"></main>
+<div class="empty-state" id="emptyState" style="display:none;">
+  <h3>Sin resultados</h3>
+  <p>No encontramos premiados que coincidan con tu búsqueda. Probá con otro nombre o quitá el filtro de año.</p>
+</div>
+
+<section class="add-section">
+  <details class="add-details" id="addDetails">
+    <summary>Cargar nuevo registro</summary>
+    <form class="add-form" id="addForm">
+      <div class="add-note">Los registros que cargues acá se guardan de forma compartida: los verá cualquier persona que abra esta guía. Usalo para incorporar designaciones nuevas u oficiales.</div>
+      <div>
+        <label for="f_category">Premio / distinción</label>
+        <select id="f_category" required></select>
+      </div>
+      <div>
+        <label for="f_year">Año</label>
+        <input type="text" id="f_year" placeholder="2026" required>
+      </div>
+      <div class="full">
+        <label for="f_name">Nombre del/de la premiado/a</label>
+        <input type="text" id="f_name" placeholder="Dr./Dra. Nombre Apellido" required>
+      </div>
+      <div class="full">
+        <label for="f_extra">Categoría / mención / unidad académica (opcional)</label>
+        <input type="text" id="f_extra" placeholder="Ej: Facultad de Química, Bioquímica y Farmacia">
+      </div>
+      <div class="full">
+        <label for="f_desc">Mérito / trayectoria destacada</label>
+        <textarea id="f_desc" placeholder="Motivo de la distinción…"></textarea>
+      </div>
+      <div>
+        <label for="f_res">N° de resolución</label>
+        <input type="text" id="f_res" placeholder="RCS - 000 / 2026">
+      </div>
+      <div>
+        <label for="f_link">Enlace a la resolución (opcional)</label>
+        <input type="text" id="f_link" placeholder="https://…">
+      </div>
+      <div class="full actions">
+        <button type="button" class="btn secondary" id="cancelAdd">Cancelar</button>
+        <button type="submit" class="btn">Guardar registro</button>
+      </div>
+    </form>
+  </details>
+</section>
+
+<div class="export-row">
+  <button class="btn secondary" id="exportBtn">Descargar datos actualizados (premios-data.js)</button>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-legal">
+    Guía informativa de la comunidad universitaria de la Universidad Nacional de San Luis (UNSL) · Las resoluciones originales pueden solicitarse en Secretaría General / Mesa de Entradas de la UNSL.
+    <span class="legal-note">
+      © 2026 <span class="author">Roberto Maximiliano Salinas Ojeda</span>. Todos los derechos reservados.<br>
+      Diseño, desarrollo y curaduría de esta aplicación son obra original del autor. Su reproducción, distribución o modificación total o parcial sin autorización está prohibida.<br>
+      Los datos de premiaciones citados corresponden a resoluciones institucionales de carácter público de la UNSL.
+    </span>
+  </div>
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+    <div class="modal-header">
+      <div class="modal-seal" id="modalSeal"></div>
+      <div>
+        <div class="modal-cat" id="modalCat"></div>
+        <div class="modal-year" id="modalYear"></div>
+        <h2 id="modalName"></h2>
+        <div class="modal-extra" id="modalExtra"></div>
+      </div>
+    </div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div class="res-block">
+      <div>
+        <div class="res-label">Resolución de designación</div>
+        <div class="res-num" id="modalRes">—</div>
+      </div>
+      <div class="res-actions">
+        <button class="btn secondary" id="copyBtn">Copiar cita</button>
+        <a class="btn" id="linkBtn" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none;">Ver resolución</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Los datos viven en premios-data.js: para sumar un premio nuevo, ese es el único archivo que hay que tocar. -->
+<script src="premios-data.js"></script>
+<script>
+const CATEGORIES = [
+  "Honoris Causa UNSL",
+  "Profesores Extraordinarios Eméritos UNSL",
+  "Premio Mauricio Amílcar López",
+  "Premio Defensa de la Educación",
+  "Premio Polo Godoy Rojo",
+  "Premio Rector Alberto Francisco Puchmüller",
+  "Premio Alberto Turco Geraiges"
+];
+
+const CAT_META = {
+  "Honoris Causa UNSL": {code:"HC", color:"var(--c-honoris)", short:"Honoris Causa"},
+  "Profesores Extraordinarios Eméritos UNSL": {code:"PE", color:"var(--c-emeritos)", short:"Prof. Eméritos"},
+  "Premio Mauricio Amílcar López": {code:"ML", color:"var(--c-lopez)", short:"Mauricio A. López"},
+  "Premio Defensa de la Educación": {code:"DE", color:"var(--c-defensa)", short:"Defensa Educación"},
+  "Premio Polo Godoy Rojo": {code:"PG", color:"var(--c-polo)", short:"Polo Godoy Rojo"},
+  "Premio Rector Alberto Francisco Puchmüller": {code:"AP", color:"var(--c-puchmuller)", short:"Rector Puchmüller"},
+  "Premio Alberto Turco Geraiges": {code:"TG", color:"var(--c-turco)", short:"Turco Geraiges"}
+};
+
+let customRecords = [];
+let activeCategory = "Todos";
+let nextCustomId = 100000;
+
+const el = (id) => document.getElementById(id);
+
+function allRecords(){
+  return BASE_DATA.concat(customRecords);
+}
+
+function sealSVG(colorVar, code, size){
+  size = size || 56;
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="50" cy="50" r="46" fill="none" stroke="'+colorVar+'" stroke-width="2.5"/>' +
+    '<circle cx="50" cy="50" r="38" fill="none" stroke="'+colorVar+'" stroke-width="1" stroke-dasharray="2 3"/>' +
+    '<text x="50" y="58" text-anchor="middle" font-family="Fraunces, serif" font-weight="600" font-size="24" fill="'+colorVar+'">'+code+'</text>' +
+    '</svg>';
+}
+
+async function loadCustomRecords(){
+  try{
+    const result = await window.storage.get('custom_records', true);
+    if(result && result.value){
+      customRecords = JSON.parse(result.value);
+      if(customRecords.length){
+        nextCustomId = Math.max(...customRecords.map(r=>r.id)) + 1;
+      }
+    }
+  }catch(e){
+    customRecords = [];
+  }
+}
+
+async function saveCustomRecords(){
+  try{
+    await window.storage.set('custom_records', JSON.stringify(customRecords), true);
+  }catch(e){
+    showToast('No se pudo guardar el registro. Probá de nuevo.');
+  }
+}
+
+function populateYearFilter(){
+  const years = Array.from(new Set(allRecords().map(r=>r.year).filter(Boolean))).sort((a,b)=>b-a);
+  const sel = el('yearFilter');
+  sel.innerHTML = '<option value="">Todos los años</option>' + years.map(y=>'<option value="'+y+'">'+y+'</option>').join('');
+}
+
+function populateCategorySelect(){
+  const sel = el('f_category');
+  sel.innerHTML = CATEGORIES.map(c=>'<option value="'+c+'">'+c+'</option>').join('');
+}
+
+function buildTabs(){
+  const wrap = el('tabs');
+  const counts = {};
+  allRecords().forEach(r=>{counts[r.category]=(counts[r.category]||0)+1;});
+  let html = '<button class="tab" data-cat="Todos" data-active="'+(activeCategory==="Todos")+'">Todos <span class="count">('+allRecords().length+')</span></button>';
+  CATEGORIES.forEach(c=>{
+    const meta = CAT_META[c];
+    html += '<button class="tab" data-cat="'+c+'" data-active="'+(activeCategory===c)+'" style="--tab-color:'+meta.color+'">'+meta.short+' <span class="count">('+(counts[c]||0)+')</span></button>';
+  });
+  wrap.innerHTML = html;
+  wrap.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      activeCategory = btn.getAttribute('data-cat');
+      render();
+    });
+  });
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+function matchesSearch(r, q){
+  if(!q) return true;
+  q = q.toLowerCase();
+  return (r.name||'').toLowerCase().includes(q) ||
+         (r.description||'').toLowerCase().includes(q) ||
+         (r.resolution||'').toLowerCase().includes(q) ||
+         (r.extra||'').toLowerCase().includes(q) ||
+         (r.year||'').toLowerCase().includes(q);
+}
+
+function render(){
+  buildTabs();
+  const q = el('searchInput').value.trim();
+  const yearF = el('yearFilter').value;
+  const order = el('sortOrder').value;
+
+  let list = allRecords().filter(r=>{
+    if(activeCategory!=="Todos" && r.category!==activeCategory) return false;
+    if(yearF && r.year!==yearF) return false;
+    if(!matchesSearch(r,q)) return false;
+    return true;
+  });
+
+  list.sort((a,b)=>{
+    const ya = parseInt(a.year)||0, yb = parseInt(b.year)||0;
+    return order==="asc" ? ya-yb : yb-ya;
+  });
+
+  el('resultCount').textContent = list.length + (list.length===1 ? ' registro' : ' registros');
+
+  const grid = el('grid');
+  const empty = el('emptyState');
+  if(list.length===0){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = list.map(r=>{
+    const meta = CAT_META[r.category] || {code:"—", color:"var(--navy)", short:r.category};
+    return '<article class="card" tabindex="0" style="--cat-color:'+meta.color+'" data-id="'+r.id+'">' +
+      '<div class="card-top"><span class="card-year">'+escapeHtml(r.year)+'</span><span class="card-cat">'+escapeHtml(meta.short)+'</span></div>' +
+      '<div class="card-name">'+escapeHtml(r.name)+'</div>' +
+      (r.extra ? '<div class="card-extra">'+escapeHtml(r.extra)+'</div>' : '') +
+      '<div class="card-desc">'+escapeHtml(r.description||'Sin reseña detallada cargada.')+'</div>' +
+      '<div class="card-res"><span>Resolución</span><b>'+escapeHtml(r.resolution||'—')+'</b></div>' +
+    '</article>';
+  }).join('');
+
+  grid.querySelectorAll('.card').forEach(card=>{
+    const open = ()=>openModal(parseInt(card.getAttribute('data-id')));
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); } });
+  });
+}
+
+function openModal(id){
+  const r = allRecords().find(x=>x.id===id);
+  if(!r) return;
+  const meta = CAT_META[r.category] || {code:"—", color:"var(--navy)", short:r.category};
+  el('modalSeal').innerHTML = sealSVG(meta.color, meta.code, 56);
+  el('modalCat').textContent = r.category;
+  el('modalCat').style.color = meta.color;
+  el('modalYear').textContent = 'Año ' + (r.year||'—');
+  el('modalName').textContent = r.name;
+  el('modalExtra').textContent = r.extra || '';
+  el('modalExtra').style.display = r.extra ? 'block' : 'none';
+  el('modalDesc').textContent = r.description || '';
+  el('modalRes').textContent = r.resolution || '—';
+  el('modalBox').style.setProperty('--cat-color', meta.color);
+
+  const linkBtn = el('linkBtn');
+  if(r.link){
+    linkBtn.href = r.link;
+    linkBtn.style.display = 'inline-block';
+  } else {
+    linkBtn.style.display = 'none';
+  }
+
+  el('copyBtn').onclick = ()=>{
+    const citation = r.name + ' — ' + r.category + ' (' + (r.year||'s/f') + '). Resolución: ' + (r.resolution||'s/d') + '. Universidad Nacional de San Luis.';
+    navigator.clipboard.writeText(citation).then(()=>{
+      showToast('Cita copiada al portapapeles');
+    }).catch(()=>{
+      showToast('No se pudo copiar. Copiá el texto manualmente.');
+    });
+  };
+
+  el('modalBackdrop').setAttribute('data-open','true');
+}
+
+function closeModal(){
+  el('modalBackdrop').setAttribute('data-open','false');
+}
+
+let toastTimer;
+function showToast(msg){
+  const t = el('toast');
+  t.textContent = msg;
+  t.setAttribute('data-show','true');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.setAttribute('data-show','false'), 2600);
+}
+
+function wireControls(){
+  el('searchInput').addEventListener('input', render);
+  el('yearFilter').addEventListener('change', render);
+  el('sortOrder').addEventListener('change', render);
+  el('modalClose').addEventListener('click', closeModal);
+  el('modalBackdrop').addEventListener('click', (e)=>{ if(e.target.id==='modalBackdrop') closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+  el('cancelAdd').addEventListener('click', ()=>{ el('addForm').reset(); el('addDetails').removeAttribute('open'); });
+  el('exportBtn').addEventListener('click', exportDataFile);
+
+  el('addForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const rec = {
+      id: nextCustomId++,
+      category: el('f_category').value,
+      year: el('f_year').value.trim(),
+      name: el('f_name').value.trim(),
+      extra: el('f_extra').value.trim(),
+      description: el('f_desc').value.trim(),
+      resolution: el('f_res').value.trim(),
+      link: el('f_link').value.trim()
+    };
+    if(!rec.name || !rec.year){ showToast('Completá al menos el nombre y el año.'); return; }
+    customRecords.push(rec);
+    await saveCustomRecords();
+    populateYearFilter();
+    el('addForm').reset();
+    el('addDetails').removeAttribute('open');
+    activeCategory = rec.category;
+    render();
+    showToast('Registro guardado');
+  });
+}
+
+function exportDataFile(){
+  const merged = BASE_DATA.concat(customRecords);
+  const header = "// Datos base del Registro de Distinciones y Premios UNSL\n" +
+    "// Generado el " + new Date().toLocaleDateString('es-AR') + " — reemplazá el archivo premios-data.js de tu repositorio por este.\n" +
+    "const BASE_DATA = ";
+  const content = header + JSON.stringify(merged, null, 2) + ";\n";
+  const blob = new Blob([content], {type:"text/javascript;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'premios-data.js';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Archivo premios-data.js descargado');
+}
+
+async function init(){
+  await loadCustomRecords();
+  populateYearFilter();
+  populateCategorySelect();
+  wireControls();
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
