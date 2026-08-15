@@ -39,6 +39,11 @@
     --c-polo:#A64B2A;
     --c-puchmuller:#4A5859;
     --c-turco:#5C4033;
+    --amb-cientifico:#1B4B5A;
+    --amb-social:#6B2737;
+    --amb-artistico:#A64B2A;
+    --amb-educativo:#3B5323;
+    --amb-sinclasificar:#8a8578;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -211,6 +216,53 @@
   }
   .empty-state h3{font-family:'Fraunces',serif;color:var(--ink);margin-bottom:6px;}
 
+  /* ===== Estadísticas ===== */
+  .view-toggle{
+    max-width:1080px;margin:0 auto;padding:16px 24px 0;
+    display:flex;gap:8px;
+  }
+  .view-btn{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.3px;
+    padding:9px 16px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);
+    border-radius:3px;cursor:pointer;
+  }
+  .view-btn[data-active="true"]{background:var(--navy);color:#fff;}
+
+  .stats-wrap{max-width:1080px;margin:0 auto;padding:20px 24px 60px;display:none;}
+  .stats-wrap[data-open="true"]{display:block;}
+  .stats-summary{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;margin-bottom:28px;
+  }
+  .stat-card{
+    background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);
+    border-radius:4px;padding:16px;
+  }
+  .stat-card .num{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--navy);line-height:1;}
+  .stat-card .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:6px;text-transform:uppercase;letter-spacing:.3px;}
+
+  .chart-block{margin-bottom:30px;}
+  .chart-block h3{
+    font-family:'Fraunces',serif;font-size:17px;font-weight:600;margin:0 0 4px;color:var(--ink);
+  }
+  .chart-note{font-size:12px;color:var(--ink-soft);margin:0 0 14px;font-style:italic;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .bar-label{
+    flex:0 0 220px;font-size:13px;color:var(--ink);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .bar-track{flex:1;background:var(--paper-dim);border-radius:3px;height:20px;position:relative;overflow:hidden;}
+  .bar-fill{
+    height:100%;border-radius:3px 0 0 3px;
+    display:flex;align-items:center;justify-content:flex-end;
+    transition:width .5s ease;
+    min-width:2px;
+  }
+  .bar-fill span{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff;padding-right:8px;
+  }
+  .bar-fill.narrow span{color:var(--ink);padding-right:0;padding-left:calc(100% + 6px);white-space:nowrap;}
+
   /* ===== Modal ===== */
   .modal-backdrop{
     position:fixed;inset:0;background:rgba(13,23,41,.55);
@@ -335,6 +387,9 @@
     .res-actions{width:100%;}
     .res-actions .btn{flex:1;}
     .card-name{font-size:16px;}
+    .bar-label{flex-basis:130px;font-size:12px;}
+    .view-toggle{padding:14px 16px 0;flex-wrap:wrap;}
+    .stats-wrap{padding:16px 16px 50px;}
   }
   @media (max-width:380px){
     .letterhead h1{font-size:19px;}
@@ -357,7 +412,12 @@
   </div>
 </header>
 
-<div class="controls-wrap">
+<div class="view-toggle">
+  <button class="view-btn" id="viewGridBtn" data-active="true">📋 Ver premios</button>
+  <button class="view-btn" id="viewStatsBtn" data-active="false">📊 Ver estadísticas</button>
+</div>
+
+<div class="controls-wrap" id="controlsWrap">
   <div class="search-row">
     <input type="text" id="searchInput" placeholder="Buscar por nombre, mérito o resolución…" autocomplete="off">
     <select id="yearFilter"><option value="">Todos los años</option></select>
@@ -369,7 +429,7 @@
   <nav class="tabs" id="tabs"></nav>
 </div>
 
-<div class="meta-row">
+<div class="meta-row" id="metaRow">
   <span id="resultCount">— registros</span>
   <span>Universidad Nacional de San Luis</span>
 </div>
@@ -378,6 +438,28 @@
 <div class="empty-state" id="emptyState" style="display:none;">
   <h3>Sin resultados</h3>
   <p>No encontramos premiados que coincidan con tu búsqueda. Probá con otro nombre o quitá el filtro de año.</p>
+</div>
+
+<div class="stats-wrap" id="statsWrap">
+  <div class="stats-summary" id="statsSummary"></div>
+
+  <div class="chart-block">
+    <h3>Distinciones por categoría de premio</h3>
+    <p class="chart-note">Total de designaciones registradas en cada uno de los 7 premios institucionales.</p>
+    <div id="chartCategory"></div>
+  </div>
+
+  <div class="chart-block">
+    <h3>Distribución por ámbito</h3>
+    <p class="chart-note">Clasificación aproximada según la trayectoria reseñada en cada resolución: científico/académico, social y derechos humanos, artístico/cultural, o educativo/institucional. Es una lectura orientativa hecha a partir del texto de cada resolución, no una categoría oficial de la UNSL — se puede ajustar caso por caso.</p>
+    <div id="chartAmbito"></div>
+  </div>
+
+  <div class="chart-block">
+    <h3>Facultades que propusieron a los Profesores Eméritos</h3>
+    <p class="chart-note">El Excel original solo registra la unidad académica proponente para la categoría "Profesores Extraordinarios Eméritos" — para las demás distinciones ese dato no consta en la fuente.</p>
+    <div id="chartFacultad"></div>
+  </div>
 </div>
 
 <section class="add-section">
@@ -408,6 +490,16 @@
       <div>
         <label for="f_res">N° de resolución</label>
         <input type="text" id="f_res" placeholder="RCS - 000 / 2026">
+      </div>
+      <div>
+        <label for="f_ambito">Ámbito (para las estadísticas)</label>
+        <select id="f_ambito">
+          <option value="Científico y Académico">Científico y Académico</option>
+          <option value="Social y Derechos Humanos">Social y Derechos Humanos</option>
+          <option value="Artístico y Cultural">Artístico y Cultural</option>
+          <option value="Educativo e Institucional">Educativo e Institucional</option>
+          <option value="Sin clasificar">Sin clasificar</option>
+        </select>
       </div>
       <div>
         <label for="f_link">Enlace a la resolución (opcional)</label>
@@ -486,6 +578,33 @@ const CAT_META = {
   "Premio Rector Alberto Francisco Puchmüller": {code:"AP", color:"var(--c-puchmuller)", short:"Rector Puchmüller"},
   "Premio Alberto Turco Geraiges": {code:"TG", color:"var(--c-turco)", short:"Turco Geraiges"}
 };
+
+const AMBITO_META = {
+  "Científico y Académico": {color:"var(--amb-cientifico)"},
+  "Social y Derechos Humanos": {color:"var(--amb-social)"},
+  "Artístico y Cultural": {color:"var(--amb-artistico)"},
+  "Educativo e Institucional": {color:"var(--amb-educativo)"},
+  "Sin clasificar": {color:"var(--amb-sinclasificar)"}
+};
+
+const FACULTY_PATTERNS = [
+  {re:/psicolog|fapsi/i, name:"Facultad de Psicología (FaPsi)"},
+  {re:/qu[ií]mica.*bioqu[ií]mica.*farmacia|fqbyf|fqbf/i, name:"Fac. de Química, Bioquímica y Farmacia (FQByF)"},
+  {re:/f[ií]sico.*matem[aá]ticas.*naturales|fcfmyn/i, name:"Fac. de Ciencias Físico-Matemáticas y Naturales (FCFMyN)"},
+  {re:/geolog/i, name:"Fac. de Ciencias Físico-Matemáticas y Naturales (FCFMyN)"},
+  {re:/ingenier[ií]a.*econ[oó]mico|fices/i, name:"Fac. de Ingeniería y Cs. Económico-Sociales (FICES)"},
+  {re:/humanas|fch/i, name:"Facultad de Ciencias Humanas (FCH)"},
+  {re:/econ[oó]micas.*jur[ií]dicas|fcejys/i, name:"Fac. de Cs. Económicas, Jurídicas y Sociales"}
+];
+
+function facultyLabel(extraText){
+  if(!extraText) return null;
+  const matches = new Set();
+  FACULTY_PATTERNS.forEach(p=>{ if(p.re.test(extraText)) matches.add(p.name); });
+  if(matches.size === 0) return "Otra dependencia (ver detalle)";
+  if(matches.size > 1) return "Varias facultades en conjunto";
+  return Array.from(matches)[0];
+}
 
 let customRecords = [];
 let activeCategory = "Todos";
@@ -686,7 +805,8 @@ function wireControls(){
       extra: el('f_extra').value.trim(),
       description: el('f_desc').value.trim(),
       resolution: el('f_res').value.trim(),
-      link: el('f_link').value.trim()
+      link: el('f_link').value.trim(),
+      ambito: el('f_ambito').value
     };
     if(!rec.name || !rec.year){ showToast('Completá al menos el nombre y el año.'); return; }
     customRecords.push(rec);
@@ -696,8 +816,88 @@ function wireControls(){
     el('addDetails').removeAttribute('open');
     activeCategory = rec.category;
     render();
+    renderStats();
     showToast('Registro guardado');
   });
+
+  el('viewGridBtn').addEventListener('click', ()=>switchView('grid'));
+  el('viewStatsBtn').addEventListener('click', ()=>switchView('stats'));
+}
+
+function switchView(mode){
+  const isStats = mode === 'stats';
+  el('viewGridBtn').setAttribute('data-active', String(!isStats));
+  el('viewStatsBtn').setAttribute('data-active', String(isStats));
+  el('controlsWrap').style.display = isStats ? 'none' : '';
+  el('metaRow').style.display = isStats ? 'none' : '';
+  el('grid').style.display = isStats ? 'none' : '';
+  el('statsWrap').setAttribute('data-open', String(isStats));
+  if(isStats){
+    el('emptyState').style.display = 'none';
+    renderStats();
+  } else {
+    render();
+  }
+}
+
+function barChart(containerId, entries, colorMap, defaultColor){
+  const max = Math.max(...entries.map(e=>e[1]), 1);
+  const html = entries.map(([label,count])=>{
+    const pct = Math.max((count/max)*100, 4);
+    const color = (colorMap && colorMap[label]) ? colorMap[label] : (defaultColor || 'var(--navy)');
+    const narrow = pct < 18;
+    return '<div class="bar-row">' +
+      '<div class="bar-label" title="'+escapeHtml(label)+'">'+escapeHtml(label)+'</div>' +
+      '<div class="bar-track"><div class="bar-fill'+(narrow?' narrow':'')+'" style="width:'+pct+'%;background:'+color+';"><span>'+count+'</span></div></div>' +
+    '</div>';
+  }).join('');
+  el(containerId).innerHTML = html || '<p class="chart-note">Sin datos suficientes todavía.</p>';
+}
+
+function renderStats(){
+  const list = allRecords();
+  const years = list.map(r=>parseInt(r.year)).filter(y=>!isNaN(y));
+  const minYear = years.length ? Math.min(...years) : '—';
+  const maxYear = years.length ? Math.max(...years) : '—';
+
+  el('statsSummary').innerHTML =
+    '<div class="stat-card"><div class="num">'+list.length+'</div><div class="lbl">Distinciones registradas</div></div>' +
+    '<div class="stat-card"><div class="num">'+CATEGORIES.length+'</div><div class="lbl">Premios institucionales</div></div>' +
+    '<div class="stat-card"><div class="num">'+minYear+'–'+maxYear+'</div><div class="lbl">Rango de años</div></div>';
+
+  // Por categoría
+  const catCounts = {};
+  CATEGORIES.forEach(c=>catCounts[c]=0);
+  list.forEach(r=>{ if(catCounts[r.category]===undefined) catCounts[r.category]=0; catCounts[r.category]++; });
+  const catColorMap = {};
+  CATEGORIES.forEach(c=>{ catColorMap[c]=CAT_META[c].color; });
+  const catEntries = CATEGORIES.map(c=>[CAT_META[c].short, catCounts[c]]);
+  const catColorMapShort = {};
+  CATEGORIES.forEach(c=>{ catColorMapShort[CAT_META[c].short]=CAT_META[c].color; });
+  barChart('chartCategory', catEntries.sort((a,b)=>b[1]-a[1]), catColorMapShort);
+
+  // Por ámbito
+  const ambitoOrder = ["Científico y Académico","Social y Derechos Humanos","Artístico y Cultural","Educativo e Institucional","Sin clasificar"];
+  const ambCounts = {};
+  ambitoOrder.forEach(a=>ambCounts[a]=0);
+  list.forEach(r=>{
+    const a = r.ambito || "Sin clasificar";
+    ambCounts[a] = (ambCounts[a]||0) + 1;
+  });
+  const ambColorMap = {};
+  ambitoOrder.forEach(a=>{ ambColorMap[a]=(AMBITO_META[a]||{}).color || 'var(--ink-soft)'; });
+  const ambEntries = ambitoOrder.map(a=>[a, ambCounts[a]]).filter(e=>e[1]>0);
+  barChart('chartAmbito', ambEntries.sort((a,b)=>b[1]-a[1]), ambColorMap);
+
+  // Facultades proponentes (solo Eméritos)
+  const emeritos = list.filter(r=>r.category === "Profesores Extraordinarios Eméritos UNSL");
+  const facCounts = {};
+  emeritos.forEach(r=>{
+    const label = facultyLabel(r.extra) || "Sin dato de facultad";
+    facCounts[label] = (facCounts[label]||0) + 1;
+  });
+  const facEntries = Object.entries(facCounts).sort((a,b)=>b[1]-a[1]);
+  barChart('chartFacultad', facEntries, null, 'var(--c-emeritos)');
 }
 
 function exportDataFile(){
@@ -724,6 +924,7 @@ async function init(){
   populateCategorySelect();
   wireControls();
   render();
+  renderStats();
 }
 
 init();
